@@ -26,7 +26,13 @@ const HomeScreen = () => {
       ) : (
         <Row>
           {products.map((product) => (
-            <Col sm={12} md={6} lg={4} xl={3}>
+            <Col
+              sm={12}
+              md={6}
+              lg={4}
+              xl={3}
+              className="align-items-stretch d-flex"
+            >
               <Product product={product} />
             </Col>
           ))}
