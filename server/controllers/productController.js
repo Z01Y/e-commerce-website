@@ -1,6 +1,5 @@
 import asyncHandler from 'express-async-handler';
-import pkg from 'nodemon';
-const { restart } = pkg;
+
 import Product from '../models/productModel.js';
 
 // @description: fetch all products
