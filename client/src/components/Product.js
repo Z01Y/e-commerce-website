@@ -3,8 +3,10 @@ import { Link } from 'react-router-dom';
 import { Card, Button } from 'react-bootstrap';
 
 import { addToCart } from '../actions/cartActions';
+import { useDispatch } from 'react-redux/es';
 
 const Product = ({ product }) => {
+  const dispatch = useDispatch();
   return (
     <Card className="my-3 p-3 rounded">
       <Link to={`/product/${product._id}`}>
@@ -21,7 +23,7 @@ const Product = ({ product }) => {
           <div className="my-3">${product.price}</div>
         </Card.Text>
 
-        <Button variant="primary" onClick={addToCart}>
+        <Button variant="primary" onClick={() => dispatch(addToCart(product._id, 1))}>
           Add to Cart
         </Button>
       </Card.Body>

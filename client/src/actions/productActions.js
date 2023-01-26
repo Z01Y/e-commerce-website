@@ -18,6 +18,8 @@ import {
 } from '../constants/productConstants';
 import { logout } from './userActions';
 
+axios.defaults.baseURL = "http://localhost:5001";
+
 export const listProducts =
   (keyword = '', pageNumber = '') =>
   async (dispatch) => {

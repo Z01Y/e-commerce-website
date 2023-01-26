@@ -32,6 +32,7 @@ const HomeScreen = () => {
               lg={4}
               xl={3}
               className="align-items-stretch d-flex"
+              key={product._id}
             >
               <Product product={product} />
             </Col>

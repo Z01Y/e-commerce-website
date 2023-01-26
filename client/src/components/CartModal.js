@@ -44,7 +44,7 @@ const Cart = () => {
   };
 
   return (
-    <Modal>
+    <>
       <Col>
         {cartItems.length === 0 ? (
           <Message>
@@ -120,7 +120,7 @@ const Cart = () => {
           </ListGroup>
         </Card>
       </Col>
-    </Modal>
+    </>
   );
 };
 
