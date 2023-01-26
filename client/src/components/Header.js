@@ -1,14 +1,23 @@
 // rafce shorcut
-import React from 'react';
+import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { Link, useParams } from 'react-router-dom';
 import { LinkContainer } from 'react-router-bootstrap';
-import { Navbar, Nav, Container, NavDropdown } from 'react-bootstrap';
+import {
+  Navbar,
+  Nav,
+  Container,
+  NavDropdown,
+  Button,
+  Modal,
+} from 'react-bootstrap';
 import { logout } from '../actions/userActions';
+import CartModal from '../components/CartModal';
 
 const Header = () => {
-  // const [show, setShow] = useState(false);
-  // const handleClose = () => setShow(false);
-  // const handelShow = () => setShow(true);
+  const [show, setShow] = useState(false);
+  const handleClose = () => setShow(false);
+  const handelShow = () => setShow(true);
   const dispatch = useDispatch();
   const userLogin = useSelector((state) => state.userLogin);
   const { userInfo } = userLogin;
@@ -27,18 +36,18 @@ const Header = () => {
           <Navbar.Toggle aria-controls="basic-navbar-nav" />
           <Navbar.Collapse id="basic-navbar-nav">
             <Nav className="ms-auto">
-              <LinkContainer to="/cart">
+              {/* <LinkContainer to="/cart">
                 <Nav.Link>
                   <i className="fas fa-shopping-cart"></i>Cart
                 </Nav.Link>
-              </LinkContainer>
-              {/* <LinkContainer to="/cart">
-                <Nav.Link>
-                  <Button onClick={handelShow}>
-                    <i className="fas fa-shopping-cart"></i> Cart
-                  </Button>
-                </Nav.Link>
               </LinkContainer> */}
+
+              <Nav.Link>
+                <Button onClick={handelShow}>
+                  <i className="fas fa-shopping-cart"></i> Cart
+                </Button>
+              </Nav.Link>
+
               {userInfo ? (
                 <NavDropdown title={userInfo.name} id="username">
                   <NavDropdown.Item onClick={logoutHandler}>
@@ -63,12 +72,14 @@ const Header = () => {
           </Navbar.Collapse>
         </Container>
       </Navbar>
-      {/* <Modal show={show} onHide={handleClose}>
+      <Modal show={show} onHide={handleClose}>
         <Modal.Header closeButton>
           <Modal.Title>Shopping Cart</Modal.Title>
         </Modal.Header>
-        <Modal.Body>This is the Modal body</Modal.Body>
-      </Modal> */}
+        <Modal.Body>
+          <CartModal />
+        </Modal.Body>
+      </Modal>
     </header>
   );
 };

@@ -2,6 +2,8 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { Card, Button } from 'react-bootstrap';
 
+import { addToCart } from '../actions/cartActions';
+
 const Product = ({ product }) => {
   return (
     <Card className="my-3 p-3 rounded">
@@ -18,7 +20,10 @@ const Product = ({ product }) => {
         <Card.Text as="h3">
           <div className="my-3">${product.price}</div>
         </Card.Text>
-        {/* <Button variant="primary">Add to Cart</Button> */}
+
+        <Button variant="primary" onClick={addToCart}>
+          Add to Cart
+        </Button>
       </Card.Body>
     </Card>
   );
