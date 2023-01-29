@@ -7,6 +7,7 @@ import Message from '../components/Message';
 import Loader from '../components/Loader';
 import FormContainer from '../components/FormContainer';
 import { login } from '../actions/userActions';
+import { emptyLocalCart } from '../actions/cartActions';
 
 const LoginScreen = () => {
   const [email, setEmail] = useState('');
@@ -31,6 +32,7 @@ const LoginScreen = () => {
   const submitHandler = (e) => {
     e.preventDefault();
     dispatch(login(email, password));
+    dispatch(emptyLocalCart());
   };
   return (
     <FormContainer>

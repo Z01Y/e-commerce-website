@@ -47,22 +47,20 @@ const Cart = () => {
     <>
       <Col>
         {cartItems.length === 0 ? (
-          <Message>
-            Your cart is empty<Link to="/">Go Back</Link>
-          </Message>
+          <Message>Your cart is empty</Message>
         ) : (
           <ListGroup variant="flush">
             {cartItems.map((item) => (
               <ListGroup.Item key={item.product}>
                 <Row>
-                  <Col md={2}>
+                  <Col>
                     <Image src={item.image} alt={item.name} fluid rounded />
                   </Col>
-                  <Col md={3}>
+                  <Col>
                     <Link to={`/product/${item.product}`}>{item.name}</Link>
                   </Col>
-                  <Col md={2}>${item.price}</Col>
-                  <Col md={2}>
+                  <Col>${item.price}</Col>
+                  <Col>
                     <Form.Control
                       as="select"
                       value={item.qty}
@@ -94,7 +92,7 @@ const Cart = () => {
           </ListGroup>
         )}
       </Col>
-      <Col md={4}>
+      <Col>
         <Card>
           <ListGroup variant="flush">
             <ListGroup.Item>

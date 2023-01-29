@@ -72,7 +72,7 @@ const Header = () => {
           </Navbar.Collapse>
         </Container>
       </Navbar>
-      <Modal show={show} onHide={handleClose}>
+      <Modal show={show} onHide={handleClose} className="modal-lg">
         <Modal.Header closeButton>
           <Modal.Title>Shopping Cart</Modal.Title>
         </Modal.Header>

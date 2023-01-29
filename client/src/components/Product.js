@@ -3,10 +3,17 @@ import { Link } from 'react-router-dom';
 import { Card, Button } from 'react-bootstrap';
 
 import { addToCart } from '../actions/cartActions';
-import { useDispatch } from 'react-redux/es';
+import { useDispatch, useSelector } from 'react-redux/es';
 
 const Product = ({ product }) => {
   const dispatch = useDispatch();
+  // const userLogin = useSelector((state) => state.userLogin);
+  // const { userInfo } = userLogin;
+
+  // const addToCartHandler = (product) => {
+  //   dispatch(addToCart(product, userInfo, 1));
+  // };
+
   return (
     <Card className="my-3 p-3 rounded">
       <Link to={`/product/${product._id}`}>
@@ -23,7 +30,16 @@ const Product = ({ product }) => {
           <div className="my-3">${product.price}</div>
         </Card.Text>
 
-        <Button variant="primary" onClick={() => dispatch(addToCart(product._id, 1))}>
+        {/* <Button
+          variant="primary"
+          onClick={() => dispatch(addToCart(product._id, 1))}
+        >
+          Add to Cart
+        </Button> */}
+        <Button
+          variant="primary"
+          onClick={() => dispatch(addToCart(product._id, 1))}
+        >
           Add to Cart
         </Button>
       </Card.Body>
