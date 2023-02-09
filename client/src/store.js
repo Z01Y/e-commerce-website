@@ -32,7 +32,7 @@ const userInfoFromStorage = localStorage.getItem('userInfo')
   : null;
 
 const initialState = {
-  cart: { cartItems: cartItemsFromStorage },
+  cart: cartItemsFromStorage,
   userLogin: { userInfo: userInfoFromStorage },
 };
 

@@ -25,7 +25,6 @@ const Cart = () => {
 
   const dispatch = useDispatch();
   const cart = useSelector((state) => state.cart);
-  const { cartItems } = cart;
 
   useEffect(() => {
     if (productId) {
@@ -46,11 +45,11 @@ const Cart = () => {
   return (
     <>
       <Col>
-        {cartItems.length === 0 ? (
+        {cart.length === 0 ? (
           <Message>Your cart is empty</Message>
         ) : (
           <ListGroup variant="flush">
-            {cartItems.map((item) => (
+            {cart.map((item) => (
               <ListGroup.Item key={item.product}>
                 <Row>
                   <Col>
@@ -97,11 +96,10 @@ const Cart = () => {
           <ListGroup variant="flush">
             <ListGroup.Item>
               <h2>
-                Subtotal ({cartItems.reduce((acc, item) => acc + item.qty, 0)})
-                items
+                Subtotal ({cart.reduce((acc, item) => acc + item.qty, 0)}) items
               </h2>
               $
-              {cartItems
+              {(<i class="fa fa-cart-plus" aria-hidden="true"></i>)
                 .reduce((acc, item) => acc + item.qty * item.price, 0)
                 .toFixed(2)}
             </ListGroup.Item>
@@ -109,7 +107,7 @@ const Cart = () => {
               <Button
                 type="button"
                 className="btn-block"
-                disabled={cartItems.length === 0}
+                disabled={cart.length === 0}
                 onClick={checkoutHandler}
               >
                 Proceed to Checkout

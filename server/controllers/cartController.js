@@ -1,46 +1,106 @@
 import Cart from '../models/cartModel.js';
+import Product from '../models/productModel.js';
 
-import asyncHandler from 'express-async-handler';
-// @description: Add to Cart
-// @route  POST /api/cart/
-// @access private
-const addToCart = asyncHandler(async (req, res) => {
-  // get existing items;
+// Add product to cart
+const addToCart = async (req, res, next) => {
+  try {
+    // Find the product being added to cart
+    const product = await Product.findById(req.body.productId);
 
-  console.log(req.body.user);
-  // const cartItems = Cart.find({ user: req.body.user });
-  const items = [];
-  items.push(req.body.product);
+    // Check if product exists
+    if (!product) {
+      return res.status(404).json({
+        success: false,
+        message: 'Product not found',
+      });
+    }
 
-  console.log('items', cartItems);
+    // Find the cart of the current user
+    let cart = await Cart.findOne({ user: req.user.id });
 
-  //
-  const updated = await Cart.update(
-    { user: req.body.user },
-    { $set: { cartItems: items } }
-  );
+    // If cart does not exist, create a new one
+    if (!cart) {
+      cart = new Cart({ user: req.user.id });
+    }
 
-  console.log(updated);
-  res.status(200).json({
-    success: true,
-    data: updated,
-  });
+    // Check if the product is already in the cart
+    const productIndex = cart.products.findIndex(
+      (p) => p.product.toString() === product._id.toString()
+    );
 
-  // const { email, password } = req.body;
-  // const user = await User.findOne({ email });
+    // If product is already in the cart, update its quantity
+    if (productIndex >= 0) {
+      cart.products[productIndex].quantity = req.body.quantity;
+    } else {
+      // Otherwise, add the product to the cart
+      cart.products.push({ product: product._id, quantity: req.body.quantity });
+    }
 
-  // if (user && (await user.matchPassword(password))) {
-  // 	res.json({
-  // 		_id: user._id,
-  // 		name: user.name,
-  // 		email: user.email,
-  // 		isAdmin: user.isAdmin,
-  // 		token: generateToken(user._id),
-  // 	});
-  // } else {
-  // 	res.status(401);
-  // 	throw new Error('Invalid email or password');
-  // }
-});
+    // Save the cart
+    await cart.save();
 
-export { addToCart };
+    res.status(200).json({
+      success: true,
+      data: cart,
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({
+      success: false,
+      message: 'Server Error',
+    });
+  }
+};
+
+// Remove product from cart
+const removeFromCart = async (req, res, next) => {
+  try {
+    // Find the cart of the current user
+    const cart = await Cart.findOne({ user: req.user.id });
+
+    // Check if cart exists
+    if (!cart) {
+      return res.status(404).json({
+        success: false,
+        message: 'Cart not found',
+      });
+    }
+
+    // Find the index of the product to be removed
+    const productIndex = cart.products.findIndex(
+      (p) => p.product.toString() === req.body.productId
+    );
+
+    // If product is not in the cart, return an error
+    if (productIndex < 0) {
+      return res.status(404).json({
+        success: false,
+        message: 'Product not found in cart',
+      });
+    }
+
+    // Remove the product from the cart
+    const quantity = cart.products[productIndex].quantity;
+    if (quantity === 1) {
+      cart.products.splice(productIndex, 1);
+    } else {
+      cart.products[productIndex].quantity -= 1;
+    }
+
+    // Save the updated cart
+    await cart.save();
+
+    res.status(200).json({
+      success: true,
+      data: cart,
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({
+      success: false,
+      message: 'Server Error',
+    });
+  }
+};
+
+export { addToCart, removeFromCart };

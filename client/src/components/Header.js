@@ -17,7 +17,7 @@ import CartModal from '../components/CartModal';
 const Header = () => {
   const [show, setShow] = useState(false);
   const handleClose = () => setShow(false);
-  const handelShow = () => setShow(true);
+  const handleShow = () => setShow(true);
   const dispatch = useDispatch();
   const userLogin = useSelector((state) => state.userLogin);
   const { userInfo } = userLogin;
@@ -43,7 +43,7 @@ const Header = () => {
               </LinkContainer> */}
 
               <Nav.Link>
-                <Button onClick={handelShow}>
+                <Button onClick={handleShow}>
                   <i className="fas fa-shopping-cart"></i> Cart
                 </Button>
               </Nav.Link>
