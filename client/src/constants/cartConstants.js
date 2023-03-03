@@ -7,3 +7,5 @@ export const REMOVE_FROM_CART = 'REMOVE_FROM_CART';
 export const FETCH_CART = 'FETCH_CART';
 export const UPDATE_CART_ITEM = 'UPDATE_CART_ITEM';
 export const INITIALIZE_CART = 'INITIALIZE_CART';
+//GET_CART
+export const GET_CART = 'GET_CART';

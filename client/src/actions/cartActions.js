@@ -24,15 +24,17 @@ export const addToCart = (id, user, qty) => async (dispatch, getState) => {
 
     if (existingProduct) {
       // If it is, update the quantity
+      console.log('update', { data, existingProduct });
       dispatch({
         type: UPDATE_CART_ITEM,
         payload: {
           productId: data._id,
-          qty: existingProduct.qty + qty,
+          qty: existingProduct.qty + 1,
         },
       });
     } else {
       // If not, add the product to the cart
+      console.log({ data });
       dispatch({
         type: ADD_TO_CART,
         payload: {

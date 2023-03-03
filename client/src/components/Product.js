@@ -5,10 +5,13 @@ import { Card, Button } from 'react-bootstrap';
 import { addToCart } from '../actions/cartActions';
 import { useDispatch, useSelector } from 'react-redux/es';
 
-const Product = ({ product, qty }) => {
+const Product = ({ product }) => {
   const dispatch = useDispatch();
   const userLogin = useSelector((state) => state.userLogin);
   const { userInfo } = userLogin;
+
+  const qty = parseInt(localStorage.getItem('qty')) || 0;
+  console.log(qty);
 
   const addToCartHandler = (product) => {
     dispatch(addToCart(product, userInfo, 1));
@@ -39,7 +42,7 @@ const Product = ({ product, qty }) => {
         {!qty ? (
           <Button
             variant="primary"
-            onClick={() => addToCartHandler(product._id, 1)}
+            onClick={() => addToCartHandler(product._id)}
           >
             Add to Cart
           </Button>

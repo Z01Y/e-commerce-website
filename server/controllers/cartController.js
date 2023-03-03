@@ -1,5 +1,6 @@
 import Cart from '../models/cartModel.js';
 import Product from '../models/productModel.js';
+import mongoose from 'mongoose';
 
 // Add product to cart
 const addToCart = async (req, res, next) => {
@@ -30,10 +31,10 @@ const addToCart = async (req, res, next) => {
 
     // If product is already in the cart, update its quantity
     if (productIndex >= 0) {
-      cart.products[productIndex].quantity = req.body.quantity;
+      cart.products[productIndex].quantity += 1;
     } else {
       // Otherwise, add the product to the cart
-      cart.products.push({ product: product._id, quantity: req.body.quantity });
+      cart.products.push({ product: product._id, quantity: 1 });
     }
 
     // Save the cart
@@ -103,4 +104,93 @@ const removeFromCart = async (req, res, next) => {
   }
 };
 
-export { addToCart, removeFromCart };
+// get cart and expend it as local storage format
+
+const getCartData = async (req, res) => {
+  try {
+    const cart = await Cart.aggregate([
+      {
+        $match: {
+          user: new mongoose.Types.ObjectId(req.user.id),
+        },
+      },
+      {
+        $lookup: {
+          from: 'products',
+          localField: 'products.product',
+          foreignField: '_id',
+          as: 'product_detail',
+        },
+      },
+      // {
+      //   $project: {
+      //     products: {
+      //       $map: {
+      //         input: '$products',
+      //         as: 'product',
+      //         in: {
+      //           id: '$$product._id',
+      //           name: '$$product.name',
+      //           image: '$$product.image',
+      //           brand: '$$product.brand',
+      //           category: '$$product.category',
+      //           description: '$$product.description',
+      //           price: '$$product.price',
+      //           quantity: '$products.quantity',
+      //         },
+      //       },
+      //     },
+      //   },
+      // },
+    ]);
+
+    //return cart[0];
+    if (!cart) {
+      res.status(200).json({
+        data: { products: [] },
+      });
+    }
+    console.log(cart[0]);
+    const result = cart[0].products.map((v, i) => ({
+      qty: v.quantity,
+      product: cart[0].product_detail[i],
+    }));
+    res.status(200).json({
+      data: { products: result },
+    });
+  } catch (error) {
+    console.error(error);
+    throw new Error('Failed to retrieve cart data');
+  }
+};
+
+// const getCartData = async (req, res) => {
+//   try {
+//     const cart = await Cart.findOne({ user: req.user._id });
+//     const formattedCart = [];
+//     cart.products.forEach((item) => {
+//       const product = item.product;
+//       formattedCart.push({
+//         product: {
+//           _id: product._id,
+//           user: product.user,
+//           name: product.name,
+//           image: product.image,
+//           brand: product.brand,
+//           category: product.category,
+//           description: product.description,
+//           price: product.price,
+//           createdAt: product.createdAt,
+//           updatedAt: product.updatedAt,
+//           __v: product.__v,
+//         },
+//         qty: item.quantity,
+//       });
+//     });
+//     return res.status(200).json(formattedCart);
+//   } catch (error) {
+//     return res.status(500).json({ message: error.message });
+//   }
+// };
+
+export { addToCart, removeFromCart, getCartData };

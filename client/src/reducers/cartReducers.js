@@ -46,6 +46,7 @@ import {
   FETCH_CART,
   UPDATE_CART_ITEM,
   INITIALIZE_CART,
+  GET_CART,
 } from '../constants/cartConstants';
 
 const initialState = {
@@ -68,7 +69,7 @@ export const cartReducer = (state = initialState, action) => {
         if (item.product._id === productId) {
           return {
             ...item,
-            qty,
+            qty: qty,
           };
         }
         return item;
@@ -93,6 +94,14 @@ export const cartReducer = (state = initialState, action) => {
         ...state,
         cart: action.payload,
       };
+    case GET_CART:
+      localStorage.setItem('cartItems', JSON.stringify(action.data));
+      console.log(action);
+      return {
+        ...state,
+        cart: action.data,
+      };
+
     default:
       return state;
   }

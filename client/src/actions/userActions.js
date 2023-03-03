@@ -11,6 +11,7 @@ import {
   USER_REGISTER_REQUEST,
   USER_REGISTER_SUCCESS,
 } from '../constants/userConstants';
+import { GET_CART } from '../constants/cartConstants';
 
 export const login = (email, password) => async (dispatch) => {
   try {
@@ -35,6 +36,18 @@ export const login = (email, password) => async (dispatch) => {
     });
 
     localStorage.setItem('userInfo', JSON.stringify(data));
+    // sync cart from db
+    const { data: cart } = await axios.get(`/api/cart`, {
+      headers: {
+        Authorization:
+          'Bearer ' + JSON.parse(localStorage.getItem('userInfo')).token,
+      },
+    });
+    console.log('hi', cart.data.products);
+    dispatch({
+      type: GET_CART,
+      data: cart.data.products,
+    });
   } catch (error) {
     dispatch({
       type: USER_LOGIN_FAIL,
